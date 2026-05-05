@@ -1,0 +1,15 @@
+services:
+  # PostgreSQL com pgvector — usado nos profiles dev e prod
+  postgres:
+    image: pgvector/pgvector:pg17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: nexus
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus
+    volumes:
+      - pgvector-data:/var/lib/postgresql/data
+
+volumes:
+  pgvector-data:

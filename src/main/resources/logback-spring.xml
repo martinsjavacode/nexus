@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <!-- Console padrão (texto legível) para desenvolvimento -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Console JSON estruturado para produção -->
+  <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <includeMdcKeyName>requestId</includeMdcKeyName>
+      <includeMdcKeyName>provider</includeMdcKeyName>
+      <includeMdcKeyName>endpoint</includeMdcKeyName>
+    </encoder>
+  </appender>
+
+  <!-- Profile local: logs legíveis no console -->
+  <springProfile name="local">
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+    <logger name="io.github.martinsjavacode.nexus" level="DEBUG"/>
+  </springProfile>
+
+  <!-- Profile dev: JSON estruturado -->
+  <springProfile name="dev">
+    <root level="INFO">
+      <appender-ref ref="JSON_CONSOLE"/>
+    </root>
+    <logger name="io.github.martinsjavacode.nexus" level="DEBUG"/>
+  </springProfile>
+
+  <!-- Profile prod: JSON estruturado, nível INFO -->
+  <springProfile name="prod">
+    <root level="WARN">
+      <appender-ref ref="JSON_CONSOLE"/>
+    </root>
+    <logger name="io.github.martinsjavacode.nexus" level="INFO"/>
+  </springProfile>
+
+</configuration>
